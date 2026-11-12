@@ -52,10 +52,11 @@ start.addEventListener('click',async()=>{
   poster.classList.add('hidden');
   video.classList.remove('hidden');
   video.currentTime=0;
-  video.muted=true;
+  video.muted=false;
+  video.volume=1;
   try{await video.play();}catch(e){
     video.controls=true;
-    video.muted=true;
+    video.muted=false;
     start.classList.remove('hidden');
     start.querySelector('span').textContent='Tap to play with sound';
   }
@@ -73,6 +74,8 @@ replay.addEventListener('click',()=>{
   poster.classList.add('hidden');
   video.classList.remove('hidden');
   video.currentTime=0;
+  video.muted=false;
+  video.volume=1;
   video.play();
 });
 </script>
