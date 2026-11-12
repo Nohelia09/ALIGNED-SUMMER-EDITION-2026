@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#eee6d8">
+<title>ALIGNED — Summer Edition 2026</title>
+<style>
+:root{--olive:#596044;--ink:#333426;--paper:#eee6d8}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Georgia,serif}
+body{min-height:100svh;display:grid;place-items:center}
+.stage{width:100%;min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at center,#f7f1e8 0%,#e8dfd1 100%)}
+.screen{width:min(94vw,58.67svh);aspect-ratio:2/3;height:auto;max-height:88svh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--paper)}
+video,.cover,.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.poster{object-fit:contain;background:#eee6d8}
+.start{position:absolute;z-index:3;inset:0;border:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.15));display:flex;align-items:flex-end;justify-content:center;padding:0 20px 12%;cursor:pointer}
+.start span{font:11px Arial,sans-serif;letter-spacing:.25em;text-transform:uppercase;color:#fff;background:rgba(67,72,48,.82);padding:16px 24px;border:1px solid rgba(255,255,255,.55)}
+.hidden{display:none!important}
+.actions{position:absolute;z-index:4;left:0;right:0;bottom:0;padding:22px 18px 28px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;background:linear-gradient(transparent,rgba(238,230,216,.97) 25%)}
+.actions a,.actions button{font:10px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding:15px 17px;border:1px solid var(--olive);background:var(--olive);color:#fff;cursor:pointer}
+.actions .secondary{background:transparent;color:var(--olive)}
+.replay{position:absolute;z-index:5;top:18px;right:18px;border:1px solid rgba(89,96,68,.5);background:rgba(238,230,216,.86);color:var(--olive);padding:10px 13px;font:9px Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<main class="stage">
+  <section class="screen" aria-label="ALIGNED Summer Edition invitation">
+    <img class="cover" src="aligned-cover.jpg" alt="Closed olive green ALIGNED envelope">
+    <img class="poster hidden" src="aligned-invitation.jpg" alt="ALIGNED Summer Edition invitation">
+    <video id="opening" class="hidden" playsinline preload="auto">
+      <source src="aligned-opening.mp4" type="video/mp4">
+    </video>
+    <button id="start" class="start" aria-label="Open invitation"><span>Open your invitation</span></button>
+    <button id="replay" class="replay hidden">Replay</button>
+    <nav id="actions" class="actions hidden" aria-label="Event details">
+      <a href="https://www.google.com/maps/search/?api=1&query=251+Brunswick+Rd%2C+Brunswick+VIC+Australia" target="_blank" rel="noopener">View location</a>
+      <a class="secondary" href="aligned-summer-edition.ics" download>Add to calendar</a>
+    </nav>
+  </section>
+</main>
+<script>
+const video=document.getElementById('opening');
+const start=document.getElementById('start');
+const poster=document.querySelector('.poster');
+const cover=document.querySelector('.cover');
+const actions=document.getElementById('actions');
+const replay=document.getElementById('replay');
+start.addEventListener('click',async()=>{
+  start.classList.add('hidden');
+  cover.classList.add('hidden');
+  poster.classList.add('hidden');
+  video.classList.remove('hidden');
+  video.currentTime=0;
+  video.muted=true;
+  try{await video.play();}catch(e){
+    video.controls=true;
+    video.muted=true;
+    start.classList.remove('hidden');
+    start.querySelector('span').textContent='Tap to play with sound';
+  }
+});
+video.addEventListener('ended',()=>{
+  video.classList.add('hidden');
+  poster.classList.remove('hidden');
+  actions.classList.remove('hidden');
+  replay.classList.remove('hidden');
+});
+replay.addEventListener('click',()=>{
+  actions.classList.add('hidden');
+  replay.classList.add('hidden');
+  cover.classList.add('hidden');
+  poster.classList.add('hidden');
+  video.classList.remove('hidden');
+  video.currentTime=0;
+  video.play();
+});
+</script>
+</body>
+</html>
