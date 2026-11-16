@@ -11,22 +11,53 @@
 html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Georgia,serif}
 body{min-height:100svh;display:grid;place-items:center}
 .stage{width:100%;min-height:100svh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at center,#f7f1e8 0%,#e8dfd1 100%)}
-.screen{width:min(94vw,58.67svh);aspect-ratio:2/3;height:auto;max-height:88svh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--paper)}
+.screen{width:min(94vw,70.5svh);aspect-ratio:4/5;height:auto;max-height:88svh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--paper);isolation:isolate}
 video,.cover,.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.poster{object-fit:contain;background:#eee6d8}
-.start{position:absolute;z-index:3;inset:0;border:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.15));display:flex;align-items:flex-end;justify-content:center;padding:0 20px 12%;cursor:pointer}
-.start span{font:11px Arial,sans-serif;letter-spacing:.25em;text-transform:uppercase;color:#fff;background:rgba(67,72,48,.82);padding:16px 24px;border:1px solid rgba(255,255,255,.55)}
+.cover{z-index:0}
+.poster{object-fit:contain;background:#eee6d8;z-index:0}
+/* Delicate moving palm shadows, visible only over the closed envelope */
+.leaf-shadows{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;opacity:.56;mix-blend-mode:multiply;transition:opacity 1.2s ease}
+.leaf-shadows svg{position:absolute;width:120%;height:120%;left:-10%;top:-10%;filter:blur(2.2px);transform-origin:72% 18%;animation:leafSway 12s ease-in-out infinite alternate}
+.leaf-shadows .second{width:100%;height:100%;left:10%;top:12%;opacity:.42;transform-origin:12% 85%;animation:leafSwayBack 15s ease-in-out infinite alternate}
+@keyframes leafSway{0%{transform:translate3d(-1.2%,.3%,0) rotate(-1.2deg)}100%{transform:translate3d(1.4%,-.6%,0) rotate(1.1deg)}}
+@keyframes leafSwayBack{0%{transform:translate3d(.8%,-.5%,0) rotate(1deg)}100%{transform:translate3d(-1% ,.7%,0) rotate(-.8deg)}}
+.start{position:absolute;z-index:3;inset:0;border:0;background:transparent;display:flex;align-items:flex-end;justify-content:center;padding:0 20px 12%;cursor:pointer}
+.start span{font:11px Arial,sans-serif;letter-spacing:.25em;text-transform:uppercase;color:transparent;background:transparent;padding:16px 24px;border:1px solid transparent}
 .hidden{display:none!important}
 .actions{position:absolute;z-index:4;left:0;right:0;bottom:0;padding:22px 18px 28px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;background:linear-gradient(transparent,rgba(238,230,216,.97) 25%)}
 .actions a,.actions button{font:10px Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;padding:15px 17px;border:1px solid var(--olive);background:var(--olive);color:#fff;cursor:pointer}
 .actions .secondary{background:transparent;color:var(--olive)}
 .replay{position:absolute;z-index:5;top:18px;right:18px;border:1px solid rgba(89,96,68,.5);background:rgba(238,230,216,.86);color:var(--olive);padding:10px 13px;font:9px Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
+.screen.is-opening .leaf-shadows{opacity:0}
+@media(prefers-reduced-motion:reduce){.leaf-shadows svg{animation:none}}
 </style>
 </head>
 <body>
 <main class="stage">
-  <section class="screen" aria-label="ALIGNED Summer Edition invitation">
+  <section class="screen" id="screen" aria-label="ALIGNED Summer Edition invitation">
     <img class="cover" src="aligned-cover.jpg" alt="Closed olive green ALIGNED envelope">
+    <div class="leaf-shadows" aria-hidden="true">
+      <svg viewBox="0 0 700 900" preserveAspectRatio="none">
+        <g fill="#20251a" opacity=".32">
+          <path d="M690 0 C560 95 510 190 390 310 C485 235 570 190 700 155Z"/>
+          <path d="M650 18 C560 145 535 245 470 390 C545 285 610 205 690 160Z"/>
+          <path d="M700 120 C575 205 530 315 445 455 C560 350 635 270 700 245Z"/>
+          <path d="M700 250 C580 310 510 420 405 555 C535 465 630 385 700 370Z"/>
+          <path d="M700 395 C585 440 500 535 385 665 C520 585 625 515 700 505Z"/>
+          <path d="M700 545 C590 575 495 660 380 790 C515 720 625 650 700 645Z"/>
+        </g>
+        <g stroke="#20251a" stroke-width="7" stroke-linecap="round" opacity=".22" fill="none">
+          <path d="M700 0 C565 145 500 305 385 505"/><path d="M700 140 C575 270 510 420 400 610"/><path d="M700 330 C570 440 500 575 390 745"/>
+        </g>
+      </svg>
+      <svg class="second" viewBox="0 0 700 900" preserveAspectRatio="none">
+        <g fill="#20251a" opacity=".23">
+          <path d="M0 900 C110 760 155 635 260 485 C205 620 130 780 0 900Z"/>
+          <path d="M35 900 C175 770 220 645 335 510 C260 655 190 800 35 900Z"/>
+          <path d="M100 900 C240 790 300 675 410 555 C330 690 255 820 100 900Z"/>
+        </g>
+      </svg>
+    </div>
     <img class="poster hidden" src="aligned-invitation.jpg" alt="ALIGNED Summer Edition invitation">
     <video id="opening" class="hidden" playsinline preload="auto">
       <source src="aligned-opening.mp4" type="video/mp4">
@@ -46,38 +77,34 @@ const poster=document.querySelector('.poster');
 const cover=document.querySelector('.cover');
 const actions=document.getElementById('actions');
 const replay=document.getElementById('replay');
-start.addEventListener('click',async()=>{
+const screen=document.getElementById('screen');
+function playOpening(){
+  actions.classList.add('hidden');
+  replay.classList.add('hidden');
   start.classList.add('hidden');
   cover.classList.add('hidden');
   poster.classList.add('hidden');
+  screen.classList.add('is-opening');
   video.classList.remove('hidden');
   video.currentTime=0;
   video.muted=false;
   video.volume=1;
-  try{await video.play();}catch(e){
+  const attempt=video.play();
+  if(attempt && typeof attempt.catch==='function') attempt.catch(()=>{
     video.controls=true;
     video.muted=false;
     start.classList.remove('hidden');
     start.querySelector('span').textContent='Tap to play with sound';
-  }
-});
+  });
+}
+start.addEventListener('click',playOpening);
 video.addEventListener('ended',()=>{
   video.classList.add('hidden');
   poster.classList.remove('hidden');
   actions.classList.remove('hidden');
   replay.classList.remove('hidden');
 });
-replay.addEventListener('click',()=>{
-  actions.classList.add('hidden');
-  replay.classList.add('hidden');
-  cover.classList.add('hidden');
-  poster.classList.add('hidden');
-  video.classList.remove('hidden');
-  video.currentTime=0;
-  video.muted=false;
-  video.volume=1;
-  video.play();
-});
+replay.addEventListener('click',playOpening);
 </script>
 </body>
 </html>
