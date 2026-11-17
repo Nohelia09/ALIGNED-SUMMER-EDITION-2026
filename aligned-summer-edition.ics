@@ -2,22 +2,23 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//ALIGNED//Summer Edition 2026//EN
 CALSCALE:GREGORIAN
+METHOD:PUBLISH
 BEGIN:VEVENT
-UID:aligned-summer-2026-saturday@example.com
-DTSTAMP:20261112T000000Z
-DTSTART:20261128T120000
-DTEND:20261128T200000
-SUMMARY:ALIGNED — Summer Edition
-LOCATION:251 Brunswick Rd\, Brunswick VIC
-DESCRIPTION:Free entry. Where summer meets elegance.
+UID:aligned-summer-2026-sat@noellestore.com.au
+DTSTAMP:20261117T000000Z
+DTSTART;TZID=Australia/Melbourne:20261128T120000
+DTEND;TZID=Australia/Melbourne:20261128T200000
+SUMMARY:ALIGNED — Summer Edition (Saturday)
+LOCATION:251 Brunswick Road\, Brunswick VIC\, Australia
+DESCRIPTION:Curated fashion. Free entrance.
 END:VEVENT
 BEGIN:VEVENT
-UID:aligned-summer-2026-sunday@example.com
-DTSTAMP:20261112T000000Z
-DTSTART:20261129T110000
-DTEND:20261129T160000
-SUMMARY:ALIGNED — Summer Edition
-LOCATION:251 Brunswick Rd\, Brunswick VIC
-DESCRIPTION:Free entry. Where summer meets elegance.
+UID:aligned-summer-2026-sun@noellestore.com.au
+DTSTAMP:20261117T000000Z
+DTSTART;TZID=Australia/Melbourne:20261129T110000
+DTEND;TZID=Australia/Melbourne:20261129T160000
+SUMMARY:ALIGNED — Summer Edition (Sunday)
+LOCATION:251 Brunswick Road\, Brunswick VIC\, Australia
+DESCRIPTION:Curated fashion. Free entrance.
 END:VEVENT
 END:VCALENDAR
